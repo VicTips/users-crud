@@ -3,7 +3,7 @@ import "./index.css";
 
 const App = () => {
   return (
-    <div className="text-3xl bg-red-200 min-h-screen flex justify-center items-center">
+    <div className="text-3xl bg-red-200 min-h-screen flex justify-center items-center font-poppins">
       Este es el Home
     </div>
   );
