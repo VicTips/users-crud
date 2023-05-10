@@ -1,10 +1,11 @@
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
+import App from "../App";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Este es el home</div>,
+    element: <App />,
   },
   {
     path: "form",
