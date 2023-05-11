@@ -1,1 +1,1 @@
-export const tableHeaders = ["Name", "Email", "Gender", "Status"]
+export const tableHeaders = ["Name", "Email", "Gender", "Status", "Options"]

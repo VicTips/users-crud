@@ -1,6 +1,7 @@
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
+import Form from "../components/Form";
 
 const router = createBrowserRouter([
   {
@@ -9,7 +10,7 @@ const router = createBrowserRouter([
   },
   {
     path: "form",
-    element: <div>Este es el form</div>,
+    element: <Form />,
   },
 ]);
 

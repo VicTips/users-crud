@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* buttons */
+.btn {
+  @apply cursor-pointer py-1 px-4 rounded-md hover:shadow-md font-medium;
+}
+.btn--fuchsia {
+  @apply bg-fuchsia-800 hover:bg-fuchsia-700 focus:bg-fuchsia-600 text-white;
+}
+.btn--blue {
+  @apply bg-cyan-700 hover:bg-cyan-600 focus:bg-cyan-500 text-white;
+}
