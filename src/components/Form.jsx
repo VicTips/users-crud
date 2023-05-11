@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_USER } from "../users/graphql-mutations";
+import { GET_USERS } from "../users/graphql-queries";
+import { Link } from "react-router-dom";
 
 const Form = () => {
   const [name, setName] = useState("");
@@ -8,7 +10,9 @@ const Form = () => {
   const [gender, setGender] = useState("");
   const [status, setStatus] = useState("");
 
-  const [createUser] = useMutation(CREATE_USER);
+  const [createUser] = useMutation(CREATE_USER, {
+    refetchQueries: [{ query: GET_USERS }],
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -51,6 +55,9 @@ const Form = () => {
         />
         <button className="btn btn--fuchsia">Create</button>
       </form>
+      <Link to="/" className="btn btn--fuchsia">
+        Go Back
+      </Link>
     </>
   );
 };
