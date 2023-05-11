@@ -12,6 +12,10 @@ const router = createBrowserRouter([
     path: "form",
     element: <Form />,
   },
+  {
+    path: "form/:id",
+    element: <Form />,
+  },
 ]);
 
 export default router;

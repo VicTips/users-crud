@@ -1,63 +1,100 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_USER } from "../users/graphql-mutations";
 import { GET_USERS } from "../users/graphql-queries";
 import { Link } from "react-router-dom";
+import ShowError from "./ShowError";
 
 const Form = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [gender, setGender] = useState("");
-  const [status, setStatus] = useState("");
+  const [errorMsg, setErrorMsg] = useState(null);
 
-  const [createUser] = useMutation(CREATE_USER, {
-    refetchQueries: [{ query: GET_USERS }],
+  const notifyError = (msg) => {
+    setErrorMsg(msg);
+    setTimeout(() => setErrorMsg(null), 4000);
+  };
+
+  const [variables, setVariables] = useState({
+    name: "",
+    email: "",
+    gender: "",
+    status: "",
   });
+
+  const [createUser, result] = useMutation(CREATE_USER, {
+    refetchQueries: [{ query: GET_USERS }],
+    onError: (error) => {
+      notifyError(error.graphQLErrors[0].message);
+    },
+  });
+
+  const handleChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setVariables((variables) => ({ ...variables, [name]: value }));
+  };
+
+  const cleanState = () => {
+    setVariables({
+      name: "",
+      email: "",
+      gender: "",
+      status: "",
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    createUser({ variables: { name, email, gender, status } });
-
-    setName("");
-    setEmail("");
-    setGender("");
-    setStatus("");
+    createUser({ variables: variables });
+    cleanState();
   };
+
+  useEffect(() => {
+    if (result.data) alert("User created succesfully!");
+  }, [result.data]);
 
   return (
     <>
       <h2 className="text-2xl">Create user</h2>
       <form onSubmit={handleSubmit}>
         <input
+          id="name"
+          name="name"
           placeholder="Name"
           type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={variables.name}
+          onChange={handleChange}
         />
         <input
+          id="email"
+          name="email"
           placeholder="Email"
           type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={variables.email}
+          onChange={handleChange}
         />
         <input
+          id="gender"
+          name="gender"
           placeholder="Gender"
           type="text"
-          value={gender}
-          onChange={(e) => setGender(e.target.value)}
+          value={variables.gender}
+          onChange={handleChange}
         />
         <input
+          id="status"
+          name="status"
           placeholder="Status"
           type="text"
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
+          value={variables.status}
+          onChange={handleChange}
         />
         <button className="btn btn--fuchsia">Create</button>
       </form>
       <Link to="/" className="btn btn--fuchsia">
         Go Back
       </Link>
+
+      <ShowError errorMsg={errorMsg} />
     </>
   );
 };

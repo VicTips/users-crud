@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 
 const App = () => {
   const { loading, error, data } = useQuery(GET_USERS);
-  console.log(data);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error</p>;
   return (
@@ -22,9 +21,6 @@ const App = () => {
         <h1 className="text-5xl font-bold text-neutral-900">Users</h1>
       </div>
       <Table headers={tableHeaders} data={data.users.nodes} />
-      <p className="text-sm text-neutral-600 italic">
-        Last users added to the database
-      </p>
       <Link
         to="/form"
         className="btn btn--blue flex justify-center items-center gap-x-1"
