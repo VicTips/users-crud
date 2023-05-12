@@ -4,22 +4,18 @@ import { CREATE_USER, UPDATE_USER } from "../users/graphql-mutations";
 import { GET_USER, GET_USERS } from "../users/graphql-queries";
 import { Link, useParams } from "react-router-dom";
 import ShowError from "./ShowError";
+import { notifyError } from "../utils/notifyError";
 
 const Form = () => {
   const { id } = useParams();
 
   const [getUser, resultPerson] = useLazyQuery(GET_USER);
 
-  useEffect(() => {
-    if (id) getUser({ variables: { id: id } });
-  }, []);
-
   const [errorMsg, setErrorMsg] = useState(null);
 
-  const notifyError = (msg) => {
-    setErrorMsg(msg);
-    setTimeout(() => setErrorMsg(null), 4000);
-  };
+  useEffect(() => {
+    if (id) getUser({ variables: { id: id } });
+  }, [errorMsg]);
 
   const [variables, setVariables] = useState({
     name: "",
@@ -42,14 +38,14 @@ const Form = () => {
   const [createUser, resultCreate] = useMutation(CREATE_USER, {
     refetchQueries: [{ query: GET_USERS }],
     onError: (error) => {
-      notifyError(error.graphQLErrors[0].message);
+      notifyError(error.graphQLErrors[0].message, setErrorMsg);
     },
   });
 
   const [updateUser, resultUpdate] = useMutation(UPDATE_USER, {
     refetchQueries: [{ query: GET_USERS }],
     onError: (error) => {
-      notifyError(error.graphQLErrors[0].message);
+      notifyError(error.graphQLErrors[0].message, setErrorMsg);
     },
   });
 

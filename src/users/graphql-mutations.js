@@ -45,7 +45,7 @@ mutation updateUser($id: Int!, $name: String!, $gender: String!, $email: String!
 
 export const DELETE_USER = gql`
 mutation deleteUser($id: Int!) {
-  delteuser (
+  deleteUser (
     input: {
       id: $id
     }
