@@ -66,7 +66,7 @@ const Table = ({ headers, data }) => {
           })}
         </tbody>
       </table>
-      {/* <ShowError errorMsg={errorMsg} /> */}
+      <ShowError errorMsg={errorMsg} />
     </div>
   );
 };

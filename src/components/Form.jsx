@@ -7,6 +7,8 @@ import ShowError from "./ShowError";
 import { notifyError } from "../utils/notifyError";
 import UsersGroupIcon from "./UsersGroupIcon";
 import LoadingSpinner from "./LoadingSpinner";
+import { genderOptions } from "../data/genderOptions";
+import { statusOptions } from "../data/statusOptions";
 
 const Form = () => {
   const { id } = useParams();
@@ -69,8 +71,10 @@ const Form = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (id) updateUser({ variables: { ...variables, id: parseInt(id) } });
-    else createUser({ variables: variables });
-    cleanState();
+    else {
+      createUser({ variables: variables });
+      cleanState();
+    }
   };
 
   useEffect(() => {
@@ -81,7 +85,8 @@ const Form = () => {
     if (resultUpdate.data) alert("User Updated succesfully!");
   }, [resultUpdate.data]);
 
-  if (resultPerson.loading || resultCreate.loading || resultUpdate.loading) return <LoadingSpinner />;
+  if (resultPerson.loading || resultCreate.loading || resultUpdate.loading)
+    return <LoadingSpinner />;
   return (
     <div className="bg-neutral-50">
       <div className="flex flex-col justify-center items-center max-w-5xl mx-auto min-h-screen">
@@ -119,6 +124,7 @@ const Form = () => {
               type="text"
               value={variables.name || ""}
               onChange={handleChange}
+              required
             />
           </div>
           <div className="flex flex-col w-full">
@@ -127,32 +133,53 @@ const Form = () => {
               id="email"
               name="email"
               placeholder="Email"
-              type="text"
+              type="email"
               value={variables.email || ""}
               onChange={handleChange}
+              required
             />
           </div>
           <div className="flex flex-col w-full">
             <label htmlFor="gender">Gender</label>
-            <input
+            <select
               id="gender"
               name="gender"
-              placeholder="Gender"
-              type="text"
-              value={variables.gender || ""}
               onChange={handleChange}
-            />
+              value={variables.gender || "default"}
+              required
+            >
+              <option defaultValue disabled value="default">
+                Select gender
+              </option>
+              {genderOptions.map((gender, index) => {
+                return (
+                  <option key={index} value={gender}>
+                    {gender}
+                  </option>
+                );
+              })}
+            </select>
           </div>
           <div className="flex flex-col w-full">
             <label htmlFor="status">Status</label>
-            <input
+            <select
               id="status"
               name="status"
-              placeholder="Status"
-              type="text"
-              value={variables.status || ""}
               onChange={handleChange}
-            />
+              value={variables.status || "default"}
+              required
+            >
+              <option defaultValue disabled value="default">
+                Select status
+              </option>
+              {statusOptions.map((status, index) => {
+                return (
+                  <option key={index} value={status}>
+                    {status}
+                  </option>
+                );
+              })}
+            </select>
           </div>
           <div className="flex gap-x-2 pt-4">
             <button className="btn btn--blue">

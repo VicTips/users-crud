@@ -3,17 +3,21 @@
 @tailwind utilities;
 
 /* Default styles */
+th {
+  @apply text-sm lg:text-base;
+}
 td {
-  @apply px-3 py-1 text-center;
+  @apply px-3 py-1 text-center text-sm lg:text-base;
 }
 tbody tr:nth-child(even) {
   @apply bg-neutral-200/50;
 }
-input {
-  @apply px-3 py-1 bg-neutral-200/40 focus:outline-none border-4 border-lime-700/30 focus:border-lime-600 rounded-md w-full
+input,
+select {
+  @apply px-3 py-1 bg-neutral-200/40 focus:outline-none border-4 border-lime-700/30 focus:border-lime-600 rounded-md w-full focus:invalid:border-red-700/50;
 }
 label {
-  @apply font-medium text-neutral-900
+  @apply font-medium text-neutral-900;
 }
 
 /* Buttons */

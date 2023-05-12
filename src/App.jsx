@@ -25,7 +25,7 @@ const App = () => {
           </div>
           <Link
             to="/form"
-            className="btn btn--green flex justify-center items-center gap-x-1"
+            className="btn btn--green flex justify-center items-center gap-x-1 text-sm lg:text-base"
           >
             New User <AddIcon />
           </Link>
