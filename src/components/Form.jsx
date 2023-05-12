@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useMutation } from "@apollo/client";
-import { CREATE_USER } from "../users/graphql-mutations";
-import { GET_USERS } from "../users/graphql-queries";
-import { Link } from "react-router-dom";
+import { useMutation, useLazyQuery } from "@apollo/client";
+import { CREATE_USER, UPDATE_USER } from "../users/graphql-mutations";
+import { GET_USER, GET_USERS } from "../users/graphql-queries";
+import { Link, useParams } from "react-router-dom";
 import ShowError from "./ShowError";
 
 const Form = () => {
+  const { id } = useParams();
+
+  const [getUser, resultPerson] = useLazyQuery(GET_USER);
+
+  useEffect(() => {
+    if (id) getUser({ variables: { id: id } });
+  }, []);
+
   const [errorMsg, setErrorMsg] = useState(null);
 
   const notifyError = (msg) => {
@@ -20,7 +28,25 @@ const Form = () => {
     status: "",
   });
 
-  const [createUser, result] = useMutation(CREATE_USER, {
+  useEffect(() => {
+    if (resultPerson.data) {
+      setVariables({
+        name: resultPerson.data.user.name,
+        email: resultPerson.data.user.email,
+        gender: resultPerson.data.user.gender,
+        status: resultPerson.data.user.status,
+      });
+    }
+  }, [resultPerson]);
+
+  const [createUser, resultCreate] = useMutation(CREATE_USER, {
+    refetchQueries: [{ query: GET_USERS }],
+    onError: (error) => {
+      notifyError(error.graphQLErrors[0].message);
+    },
+  });
+
+  const [updateUser, resultUpdate] = useMutation(UPDATE_USER, {
     refetchQueries: [{ query: GET_USERS }],
     onError: (error) => {
       notifyError(error.graphQLErrors[0].message);
@@ -44,13 +70,18 @@ const Form = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createUser({ variables: variables });
+    if (id) updateUser({ variables: { ...variables, id: parseInt(id) } });
+    else createUser({ variables: variables });
     cleanState();
   };
 
   useEffect(() => {
-    if (result.data) alert("User created succesfully!");
-  }, [result.data]);
+    if (resultCreate.data) alert("User created succesfully!");
+  }, [resultCreate.data]);
+
+  useEffect(() => {
+    if (resultUpdate.data) alert("User Updated succesfully!");
+  }, [resultUpdate.data]);
 
   return (
     <>
@@ -61,7 +92,7 @@ const Form = () => {
           name="name"
           placeholder="Name"
           type="text"
-          value={variables.name}
+          value={variables.name || ""}
           onChange={handleChange}
         />
         <input
@@ -69,7 +100,7 @@ const Form = () => {
           name="email"
           placeholder="Email"
           type="text"
-          value={variables.email}
+          value={variables.email || ""}
           onChange={handleChange}
         />
         <input
@@ -77,7 +108,7 @@ const Form = () => {
           name="gender"
           placeholder="Gender"
           type="text"
-          value={variables.gender}
+          value={variables.gender || ""}
           onChange={handleChange}
         />
         <input
@@ -85,10 +116,10 @@ const Form = () => {
           name="status"
           placeholder="Status"
           type="text"
-          value={variables.status}
+          value={variables.status || ""}
           onChange={handleChange}
         />
-        <button className="btn btn--fuchsia">Create</button>
+        <button className="btn btn--fuchsia">{id ? "Update" : "Create"}</button>
       </form>
       <Link to="/" className="btn btn--fuchsia">
         Go Back

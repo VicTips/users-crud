@@ -1,6 +1,4 @@
 import React from "react";
-import EditIcon from "./EditIcon";
-import DeleteIcon from "./DeleteIcon";
 import { Link } from "react-router-dom";
 
 const Table = ({ headers, data }) => {
@@ -10,17 +8,14 @@ const Table = ({ headers, data }) => {
         <tr className="bg-cyan-800 text-white">
           {headers.map((header, index) => {
             return (
-              <th
-                key={index}
-                className="px-3 py-2 tracking-wide font-semibold"
-              >
+              <th key={index} className="px-3 py-2 tracking-wide font-semibold">
                 {header}
               </th>
             );
           })}
         </tr>
       </thead>
-      <tbody>
+      <tbody className="bg-neutral-100">
         {data.map((row, index) => {
           return (
             <tr key={index} className="hover:bg-neutral-400/30">
