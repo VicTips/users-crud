@@ -4,9 +4,30 @@ import { Link } from "react-router-dom";
 import { DELETE_USER } from "../users/graphql-mutations";
 import { GET_USERS } from "../users/graphql-queries";
 import { notifyError } from "../utils/notifyError";
-import ShowError from "./ShowError";
+import Swal from "sweetalert2";
 
 const Table = ({ headers, data }) => {
+  const warningModal = (row) => {
+    Swal.fire({
+      title: `Are you sure that you want to delete "${row.name}"?`,
+      text: "This user will be deleted inmediately. You can't undo this action.",
+      icon: "warning",
+      showCancelButton: true,
+      showCloseButton: true,
+      confirmButtonText: "Delete",
+      cancelButtonText: "Cancel",
+      customClass: {
+        confirmButton: "btn btn--blue mr-4",
+        cancelButton: "btn btn--fuchsia",
+      },
+      buttonsStyling: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteUser({ variables: { id: row.id } });
+      }
+    });
+  };
+
   const [errorMsg, setErrorMsg] = useState(null);
 
   const [deleteUser, resultDelete] = useMutation(DELETE_USER, {
@@ -17,8 +38,26 @@ const Table = ({ headers, data }) => {
   });
 
   useEffect(() => {
-    if (resultDelete.data) alert("User deleted succesfully!");
+    if (resultDelete.data)
+      Swal.fire({
+        icon: "success",
+        title: "User deleted successfully!",
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
   }, [resultDelete.data]);
+
+  useEffect(() => {
+    if (errorMsg)
+      Swal.fire({
+        icon: "error",
+        title: errorMsg,
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
+  }, [errorMsg]);
 
   return (
     <div className="w-full overflow-x-auto">
@@ -54,7 +93,7 @@ const Table = ({ headers, data }) => {
                       Edit
                     </Link>
                     <button
-                      onClick={() => deleteUser({ variables: { id: row.id } })}
+                      onClick={() => warningModal(row)}
                       className="btn btn--fuchsia text-sm"
                     >
                       Delete
@@ -66,7 +105,6 @@ const Table = ({ headers, data }) => {
           })}
         </tbody>
       </table>
-      <ShowError errorMsg={errorMsg} />
     </div>
   );
 };

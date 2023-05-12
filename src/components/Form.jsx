@@ -3,12 +3,12 @@ import { useMutation, useLazyQuery } from "@apollo/client";
 import { CREATE_USER, UPDATE_USER } from "../users/graphql-mutations";
 import { GET_USER, GET_USERS } from "../users/graphql-queries";
 import { Link, useParams } from "react-router-dom";
-import ShowError from "./ShowError";
 import { notifyError } from "../utils/notifyError";
 import UsersGroupIcon from "./UsersGroupIcon";
 import LoadingSpinner from "./LoadingSpinner";
 import { genderOptions } from "../data/genderOptions";
 import { statusOptions } from "../data/statusOptions";
+import Swal from "sweetalert2";
 
 const Form = () => {
   const { id } = useParams();
@@ -78,11 +78,36 @@ const Form = () => {
   };
 
   useEffect(() => {
-    if (resultCreate.data) alert("User created succesfully!");
+    if (errorMsg)
+      Swal.fire({
+        icon: "error",
+        title: errorMsg,
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
+  }, [errorMsg]);
+
+  useEffect(() => {
+    if (resultCreate.data)
+      Swal.fire({
+        icon: "success",
+        title: "User created successfully!",
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
   }, [resultCreate.data]);
 
   useEffect(() => {
-    if (resultUpdate.data) alert("User Updated succesfully!");
+    if (resultUpdate.data)
+      Swal.fire({
+        icon: "success",
+        title: "User updated successfully!",
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
   }, [resultUpdate.data]);
 
   if (resultPerson.loading || resultCreate.loading || resultUpdate.loading)
@@ -190,8 +215,6 @@ const Form = () => {
             </Link>
           </div>
         </form>
-
-        <ShowError errorMsg={errorMsg} />
       </div>
     </div>
   );
