@@ -29,10 +29,10 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-You would need to have npm at least.
-* npm
+You would need to install yarn.
+* yarn
   ```sh
-  npm install npm@latest -g
+  npm install --global yarn
   ```
 
 ### Installation
@@ -44,7 +44,7 @@ You would need to have npm at least.
    ```
 3. Install NPM packages
    ```sh
-   npm install
+   yarn install
    ```
 4. Create `.env.local` file at the root of the project with the access token from step 1.
    ```js
@@ -52,7 +52,7 @@ You would need to have npm at least.
    ```
 5. Run your project and have fun!
    ```sh
-   npm run dev
+   yarn run dev
    ```
    
 ## Online version
