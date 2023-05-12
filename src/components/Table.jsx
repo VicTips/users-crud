@@ -21,8 +21,8 @@ const Table = ({ headers, data }) => {
   }, [resultDelete.data]);
 
   return (
-    <>
-      <table>
+    <div className="w-full overflow-x-auto">
+      <table className="w-full">
         <thead>
           <tr className="bg-cyan-800 text-white">
             {headers.map((header, index) => {
@@ -40,12 +40,12 @@ const Table = ({ headers, data }) => {
         <tbody className="bg-neutral-100">
           {data.map((row, index) => {
             return (
-              <tr key={index} className="hover:bg-neutral-400/30">
-                <td className="px-3 py-1 text-center">{row.name}</td>
-                <td className="px-3 py-1 text-center">{row.email}</td>
-                <td className="px-3 py-1 text-center">{row.gender}</td>
-                <td className="px-3 py-1 text-center">{row.status}</td>
-                <td className="px-3 py-1">
+              <tr key={index}>
+                <td>{row.name}</td>
+                <td>{row.email}</td>
+                <td>{row.gender}</td>
+                <td>{row.status}</td>
+                <td>
                   <div className="flex justify-center gap-x-2">
                     <Link
                       to={`/form/${row.id}`}
@@ -66,8 +66,8 @@ const Table = ({ headers, data }) => {
           })}
         </tbody>
       </table>
-      <ShowError errorMsg={errorMsg} />
-    </>
+      {/* <ShowError errorMsg={errorMsg} /> */}
+    </div>
   );
 };
 

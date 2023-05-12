@@ -2,7 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-/* buttons */
+/* Default styles */
+td {
+  @apply px-3 py-1 text-center;
+}
+tbody tr:nth-child(even) {
+  @apply bg-neutral-200/50;
+}
+input {
+  @apply px-3 py-1 bg-neutral-200/40 focus:outline-none border-4 border-lime-700/30 focus:border-lime-600 rounded-md w-full
+}
+label {
+  @apply font-medium text-neutral-900
+}
+
+/* Buttons */
 .btn {
   @apply cursor-pointer py-1 px-4 rounded-md hover:shadow-md font-medium;
 }
@@ -11,4 +25,21 @@
 }
 .btn--blue {
   @apply bg-cyan-700 hover:bg-cyan-600 focus:bg-cyan-500 text-white;
+}
+.btn--green {
+  @apply bg-lime-600 hover:bg-lime-500 focus:bg-lime-700 text-white;
+}
+
+/* Spinner */
+.loader {
+  animation: rotation 1s linear infinite;
+  @apply w-12 h-12 border-4 border-white border-b-lime-600 rounded-full inline-block box-border;
+}
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
